@@ -1,6 +1,7 @@
 'use server';
 
 import { updateOrderStatus, updateTrackingNumber } from '@/lib/orders';
+import { getAdminUser } from '@/lib/supabase/auth';
 
 /**
  * Server Action: marks an order as paid.
@@ -13,6 +14,8 @@ import { updateOrderStatus, updateTrackingNumber } from '@/lib/orders';
 export async function setOrderPaid(
   id: string
 ): Promise<{ success: boolean; error?: string }> {
+  const user = await getAdminUser();
+  if (!user) return { success: false, error: 'Non autorisé.' };
   return updateOrderStatus(id, 'paid');
 }
 
@@ -23,6 +26,8 @@ export async function setOrderPaid(
 export async function cancelOrder(
   id: string
 ): Promise<{ success: boolean; error?: string }> {
+  const user = await getAdminUser();
+  if (!user) return { success: false, error: 'Non autorisé.' };
   return updateOrderStatus(id, 'cancelled');
 }
 
@@ -33,6 +38,8 @@ export async function setTrackingNumber(
   id: string,
   tracking: string
 ): Promise<{ success: boolean }> {
+  const user = await getAdminUser();
+  if (!user) return { success: false };
   return updateTrackingNumber(id, tracking);
 }
 
@@ -43,6 +50,9 @@ export async function setTrackingNumber(
 export async function setOrderShipped(
   id: string
 ): Promise<{ success: boolean }> {
+  const user = await getAdminUser();
+  if (!user) return { success: false };
+
   const { supabaseServer } = await import('@/lib/supabase/server');
 
   const { error } = await supabaseServer

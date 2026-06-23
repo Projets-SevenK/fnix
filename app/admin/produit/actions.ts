@@ -1,7 +1,11 @@
 'use server';
 
 import { supabaseServer } from '@/lib/supabase/server';
+import { getAdminUser } from '@/lib/supabase/auth';
 import type { AdminSettings } from '@/types/database';
+
+const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
 
 type ImageField =
   | 'hero_image_url'
@@ -30,6 +34,9 @@ function isImageField(value: string): value is ImageField {
 export async function updateSettings(
   data: Partial<AdminSettings>
 ): Promise<{ success: boolean; error?: string }> {
+  const user = await getAdminUser();
+  if (!user) return { success: false, error: 'Non autorisé.' };
+
   // Whitelist: never allow image fields or id/updated_at to be set via this action
   const safeFields: (keyof AdminSettings)[] = [
     'product_description',
@@ -61,7 +68,7 @@ export async function updateSettings(
 
   if (error) {
     console.error('[updateSettings] Supabase error:', error.message);
-    return { success: false, error: error.message };
+    return { success: false, error: 'Erreur base de données.' };
   }
 
   return { success: true };
@@ -77,6 +84,9 @@ export async function uploadProductImage(
   formData: FormData,
   imageField: string
 ): Promise<{ success: boolean; url?: string; error?: string }> {
+  const user = await getAdminUser();
+  if (!user) return { success: false, error: 'Non autorisé.' };
+
   if (!isImageField(imageField)) {
     return { success: false, error: 'Champ image non autorisé.' };
   }
@@ -90,6 +100,14 @@ export async function uploadProductImage(
     return { success: false, error: 'Le fichier est vide.' };
   }
 
+  if (!ALLOWED_MIME_TYPES.includes(file.type)) {
+    return { success: false, error: 'Type de fichier non autorisé. Formats acceptés : JPG, PNG, WebP, GIF.' };
+  }
+
+  if (file.size > MAX_FILE_SIZE_BYTES) {
+    return { success: false, error: 'Fichier trop volumineux (max 5 Mo).' };
+  }
+
   // Derive extension from MIME type or original name
   const nameParts = file.name.split('.');
   const extension = nameParts.length > 1 ? nameParts[nameParts.length - 1] : 'jpg';
@@ -101,7 +119,7 @@ export async function uploadProductImage(
 
   if (uploadError) {
     console.error('[uploadProductImage] Upload error:', uploadError.message);
-    return { success: false, error: uploadError.message };
+    return { success: false, error: 'Erreur lors de l\'upload.' };
   }
 
   const { data: publicUrlData } = supabaseServer.storage
@@ -117,7 +135,7 @@ export async function uploadProductImage(
 
   if (updateError) {
     console.error('[uploadProductImage] DB update error:', updateError.message);
-    return { success: false, error: updateError.message };
+    return { success: false, error: 'Erreur base de données.' };
   }
 
   return { success: true, url: publicUrl };
@@ -131,13 +149,16 @@ export async function uploadProductImage(
 export async function adjustStock(
   remaining: number
 ): Promise<{ success: boolean; error?: string }> {
+  const user = await getAdminUser();
+  if (!user) return { success: false, error: 'Non autorisé.' };
+
   const { error } = await supabaseServer.rpc('adjust_stock', {
     p_remaining: remaining,
   });
 
   if (error) {
     console.error('[adjustStock] RPC error:', error.message);
-    return { success: false, error: error.message };
+    return { success: false, error: 'Erreur base de données.' };
   }
 
   return { success: true };
