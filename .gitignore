@@ -16,3 +16,5 @@ out/
 *.zip
 
 .claude/settings.local.json
+
+tsconfig.tsbuildinfo
