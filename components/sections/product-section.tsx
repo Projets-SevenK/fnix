@@ -1,4 +1,12 @@
+import Image from "next/image";
 import Button from "@/components/ui/button";
+
+interface ProductSectionProps {
+  mainImageUrl?: string | null;
+  secondary1Url?: string | null;
+  secondary2Url?: string | null;
+  description?: string | null;
+}
 
 const productDetails = [
   { label: "Couleur", value: "Une seule" },
@@ -9,7 +17,12 @@ const productDetails = [
   { label: "Livraison", value: "La Poste" },
 ];
 
-export default function ProductSection() {
+export default function ProductSection({
+  mainImageUrl,
+  secondary1Url,
+  secondary2Url,
+  description,
+}: ProductSectionProps) {
   return (
     <section
       id="produit"
@@ -32,60 +45,98 @@ export default function ProductSection() {
           La première pièce FNIX
         </h2>
         <p className="font-[family-name:var(--font-archivo)] text-[17px] text-[#9a9aa0] max-w-[560px] leading-[1.6] mb-12">
-          Un t-shirt pensé comme une première empreinte&nbsp;: simple, direct,
-          chargé de sens. Un seul modèle, pour le premier drop.
+          {description
+            ? description
+            : <>Un t-shirt pensé comme une première empreinte&nbsp;: simple, direct,
+          chargé de sens. Un seul modèle, pour le premier drop.</>}
         </p>
 
         {/* Grid: images left, product card right */}
         <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] gap-6">
           {/* Image grid */}
           <div className="grid grid-cols-2 gap-4">
-            {/* Main placeholder */}
-            <div
-              className="col-span-2 h-[300px] md:h-[380px] relative rounded-[14px] flex items-center justify-center border border-white/[0.08]"
-              style={{
-                background:
-                  "repeating-linear-gradient(135deg, #0d0d10 0, #0d0d10 11px, #131318 11px, #131318 22px)",
-              }}
-              aria-label="Visuel T-shirt porté — fille"
-            >
-              <span className="font-[family-name:var(--font-space-mono)] text-[12px] tracking-[2px] text-[#56565c] uppercase">
-                [ T-shirt porté — fille ]
-              </span>
-              <span className="absolute top-[14px] right-4 font-[family-name:var(--font-space-mono)] text-[11px] text-[#2f2f35] tracking-[2px]">
-                044
-              </span>
-            </div>
+            {/* Main image or placeholder */}
+            {mainImageUrl ? (
+              <div className="col-span-2 h-[300px] md:h-[380px] relative rounded-[14px] overflow-hidden border border-white/[0.08]">
+                <Image
+                  src={mainImageUrl}
+                  alt="T-shirt FNIX Drop 044 — vue principale"
+                  fill
+                  style={{ objectFit: 'cover' }}
+                  sizes="(max-width: 1024px) 100vw, 55vw"
+                />
+              </div>
+            ) : (
+              <div
+                className="col-span-2 h-[300px] md:h-[380px] relative rounded-[14px] flex items-center justify-center border border-white/[0.08]"
+                style={{
+                  background:
+                    "repeating-linear-gradient(135deg, #0d0d10 0, #0d0d10 11px, #131318 11px, #131318 22px)",
+                }}
+                aria-label="Visuel T-shirt porté — fille"
+              >
+                <span className="font-[family-name:var(--font-space-mono)] text-[12px] tracking-[2px] text-[#56565c] uppercase">
+                  [ T-shirt porté — fille ]
+                </span>
+                <span className="absolute top-[14px] right-4 font-[family-name:var(--font-space-mono)] text-[11px] text-[#2f2f35] tracking-[2px]">
+                  044
+                </span>
+              </div>
+            )}
 
-            {/* Secondary placeholder 1 */}
-            <div
-              className="h-[180px] md:h-[220px] rounded-[14px] flex items-center justify-center border border-white/[0.08]"
-              style={{
-                background:
-                  "repeating-linear-gradient(135deg, #0d0d10 0, #0d0d10 11px, #131318 11px, #131318 22px)",
-              }}
-              aria-label="Visuel T-shirt porté — garçon"
-            >
-              <span className="font-[family-name:var(--font-space-mono)] text-[11px] tracking-[2px] text-[#56565c] uppercase text-center">
-                [ T-shirt porté
-                <br />
-                garçon ]
-              </span>
-            </div>
+            {/* Secondary image 1 or placeholder */}
+            {secondary1Url ? (
+              <div className="h-[180px] md:h-[220px] relative rounded-[14px] overflow-hidden border border-white/[0.08]">
+                <Image
+                  src={secondary1Url}
+                  alt="T-shirt FNIX Drop 044 — vue secondaire 1"
+                  fill
+                  style={{ objectFit: 'cover' }}
+                  sizes="(max-width: 1024px) 50vw, 28vw"
+                />
+              </div>
+            ) : (
+              <div
+                className="h-[180px] md:h-[220px] rounded-[14px] flex items-center justify-center border border-white/[0.08]"
+                style={{
+                  background:
+                    "repeating-linear-gradient(135deg, #0d0d10 0, #0d0d10 11px, #131318 11px, #131318 22px)",
+                }}
+                aria-label="Visuel T-shirt porté — garçon"
+              >
+                <span className="font-[family-name:var(--font-space-mono)] text-[11px] tracking-[2px] text-[#56565c] uppercase text-center">
+                  [ T-shirt porté
+                  <br />
+                  garçon ]
+                </span>
+              </div>
+            )}
 
-            {/* Secondary placeholder 2 */}
-            <div
-              className="h-[180px] md:h-[220px] rounded-[14px] flex items-center justify-center border border-white/[0.08]"
-              style={{
-                background:
-                  "repeating-linear-gradient(135deg, #0d0d10 0, #0d0d10 11px, #131318 11px, #131318 22px)",
-              }}
-              aria-label="Détail logo avant du t-shirt"
-            >
-              <span className="font-[family-name:var(--font-space-mono)] text-[11px] tracking-[2px] text-[#56565c] uppercase">
-                [ Détail logo avant ]
-              </span>
-            </div>
+            {/* Secondary image 2 or placeholder */}
+            {secondary2Url ? (
+              <div className="h-[180px] md:h-[220px] relative rounded-[14px] overflow-hidden border border-white/[0.08]">
+                <Image
+                  src={secondary2Url}
+                  alt="T-shirt FNIX Drop 044 — vue secondaire 2"
+                  fill
+                  style={{ objectFit: 'cover' }}
+                  sizes="(max-width: 1024px) 50vw, 28vw"
+                />
+              </div>
+            ) : (
+              <div
+                className="h-[180px] md:h-[220px] rounded-[14px] flex items-center justify-center border border-white/[0.08]"
+                style={{
+                  background:
+                    "repeating-linear-gradient(135deg, #0d0d10 0, #0d0d10 11px, #131318 11px, #131318 22px)",
+                }}
+                aria-label="Détail logo avant du t-shirt"
+              >
+                <span className="font-[family-name:var(--font-space-mono)] text-[11px] tracking-[2px] text-[#56565c] uppercase">
+                  [ Détail logo avant ]
+                </span>
+              </div>
+            )}
           </div>
 
           {/* Product card */}

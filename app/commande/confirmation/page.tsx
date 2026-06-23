@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
+import { getSettings } from '@/lib/settings';
 
 export const metadata: Metadata = {
   title: 'Confirmation de commande — FNIX Drop 044',
@@ -18,9 +19,12 @@ function isValidReference(ref: unknown): ref is string {
 }
 
 export default async function ConfirmationPage({ searchParams }: ConfirmationPageProps) {
-  const params = await searchParams;
+  const [params, settings] = await Promise.all([searchParams, getSettings()]);
   const rawRef = params['ref'];
   const ref = Array.isArray(rawRef) ? rawRef[0] : rawRef;
+
+  const weroPhone = settings?.wero_phone ?? '06 XX XX XX XX';
+  const weroBeneficiary = settings?.wero_beneficiary_name ?? null;
 
   if (!isValidReference(ref)) {
     return (
@@ -145,11 +149,18 @@ export default async function ConfirmationPage({ searchParams }: ConfirmationPag
                   Effectue un virement vers le numéro suivant :
                 </p>
                 <p className="font-[family-name:var(--font-space-mono)] text-[15px] text-[#f4f4f3] mt-1">
-                  06 XX XX XX XX
+                  {weroPhone}
                 </p>
-                <p className="font-[family-name:var(--font-archivo)] text-[11px] text-[#56565c] mt-1">
-                  (Le numéro définitif sera communiqué prochainement)
-                </p>
+                {weroBeneficiary && (
+                  <p className="font-[family-name:var(--font-archivo)] text-[13px] text-[#86868c] mt-1">
+                    Bénéficiaire : {weroBeneficiary}
+                  </p>
+                )}
+                {weroPhone === '06 XX XX XX XX' && (
+                  <p className="font-[family-name:var(--font-archivo)] text-[11px] text-[#56565c] mt-1">
+                    (Le numéro définitif sera communiqué prochainement)
+                  </p>
+                )}
               </div>
             </li>
 

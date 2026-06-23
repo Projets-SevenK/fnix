@@ -7,15 +7,23 @@ import StorySection from "@/components/sections/story-section";
 import ValuesSection from "@/components/sections/values-section";
 import OrderSection from "@/components/sections/order-section";
 import FaqSection from "@/components/sections/faq-section";
+import { getSettings } from "@/lib/settings";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const settings = await getSettings();
+
   return (
     <>
       <Header />
       <main>
-        <HeroSection />
+        <HeroSection heroImageUrl={settings?.hero_image_url ?? null} />
         <TickerSection />
-        <ProductSection />
+        <ProductSection
+          mainImageUrl={settings?.product_image_main_url ?? null}
+          secondary1Url={settings?.product_image_secondary_1_url ?? null}
+          secondary2Url={settings?.product_image_secondary_2_url ?? null}
+          description={settings?.product_description ?? null}
+        />
         <StorySection />
         <ValuesSection />
         <OrderSection />

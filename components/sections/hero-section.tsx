@@ -1,7 +1,11 @@
 import Image from "next/image";
 import Button from "@/components/ui/button";
 
-export default function HeroSection() {
+interface HeroSectionProps {
+  heroImageUrl?: string | null;
+}
+
+export default function HeroSection({ heroImageUrl }: HeroSectionProps) {
   return (
     <section
       className="relative overflow-hidden flex items-center min-h-[760px]"
@@ -65,22 +69,34 @@ export default function HeroSection() {
           </div>
         </div>
 
-        {/* Product image placeholder */}
-        <div
-          className="flex-none w-full md:w-[330px] h-[300px] md:h-[450px] rounded-[14px] flex items-center justify-center relative border border-white/[0.08]"
-          style={{
-            background:
-              "repeating-linear-gradient(135deg, #0d0d10 0, #0d0d10 11px, #131318 11px, #131318 22px)",
-          }}
-          aria-label="Emplacement visuel T-shirt FNIX Drop 044"
-        >
-          <span className="font-[family-name:var(--font-space-mono)] text-[12px] tracking-[2px] text-[#56565c] uppercase">
-            [ T-shirt porté ]
-          </span>
-          <span className="absolute top-[14px] right-4 font-[family-name:var(--font-space-mono)] text-[11px] text-[#2f2f35] tracking-[2px]">
-            044
-          </span>
-        </div>
+        {/* Product image — dynamic or placeholder */}
+        {heroImageUrl ? (
+          <div className="flex-none w-full md:w-[330px] h-[300px] md:h-[450px] rounded-[14px] overflow-hidden relative border border-white/[0.08]">
+            <Image
+              src={heroImageUrl}
+              alt="T-shirt FNIX Drop 044"
+              fill
+              style={{ objectFit: 'cover' }}
+              sizes="(max-width: 768px) 100vw, 330px"
+            />
+          </div>
+        ) : (
+          <div
+            className="flex-none w-full md:w-[330px] h-[300px] md:h-[450px] rounded-[14px] flex items-center justify-center relative border border-white/[0.08]"
+            style={{
+              background:
+                "repeating-linear-gradient(135deg, #0d0d10 0, #0d0d10 11px, #131318 11px, #131318 22px)",
+            }}
+            aria-label="Emplacement visuel T-shirt FNIX Drop 044"
+          >
+            <span className="font-[family-name:var(--font-space-mono)] text-[12px] tracking-[2px] text-[#56565c] uppercase">
+              [ T-shirt porté ]
+            </span>
+            <span className="absolute top-[14px] right-4 font-[family-name:var(--font-space-mono)] text-[11px] text-[#2f2f35] tracking-[2px]">
+              044
+            </span>
+          </div>
+        )}
       </div>
     </section>
   );

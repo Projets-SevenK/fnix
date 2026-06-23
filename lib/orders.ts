@@ -44,7 +44,21 @@ export async function createOrder(
 
   const reference = generateReference(Number(seqData));
 
-  // 3. Insert the order
+  // 3. Read product price dynamically from admin_settings (fallback: 44.00)
+  let productPrice = 44.0;
+  const { data: settingsData, error: settingsError } = await supabaseServer
+    .from('admin_settings')
+    .select('product_price')
+    .limit(1)
+    .single();
+
+  if (settingsError) {
+    console.error('[createOrder] Settings read error (using fallback price):', settingsError.message);
+  } else if (settingsData?.product_price != null) {
+    productPrice = Number(settingsData.product_price);
+  }
+
+  // 4. Insert the order
   const { error: insertError } = await supabaseServer.from('orders').insert({
     reference,
     customer_first_name: data.customer_first_name,
@@ -55,7 +69,7 @@ export async function createOrder(
     product_name: 'T-shirt FNIX Drop 044',
     size: 'M',
     quantity: data.quantity,
-    amount_expected: 44.0,
+    amount_expected: productPrice,
     payment_status: 'pending',
     shipping_status: 'not_prepared',
     customer_note: data.customer_note ?? null,

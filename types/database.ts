@@ -39,4 +39,11 @@ export type AdminSettings = {
   shipping_price: number;
   instagram_url: string | null;
   updated_at: string;
+  product_description: string | null;
+  product_status: 'available' | 'coming_soon' | 'sold_out';
+  wero_beneficiary_name: string | null;
+  hero_image_url: string | null;
+  product_image_main_url: string | null;
+  product_image_secondary_1_url: string | null;
+  product_image_secondary_2_url: string | null;
 };

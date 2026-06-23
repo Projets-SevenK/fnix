@@ -151,25 +151,44 @@ export default async function AdminCommandesPage() {
           </span>
         </div>
 
-        <form action={signOut}>
-          <button
-            type="submit"
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <Link
+            href="/admin/produit"
             style={{
-              background: 'transparent',
-              border: '1px solid rgba(255,255,255,0.1)',
-              borderRadius: '6px',
-              color: '#86868c',
-              fontSize: '0.8rem',
               fontFamily: 'var(--font-space-mono), monospace',
+              fontSize: '0.75rem',
+              color: '#1183E6',
+              textDecoration: 'none',
               letterSpacing: '0.06em',
-              padding: '0.4rem 0.9rem',
-              cursor: 'pointer',
               textTransform: 'uppercase',
+              border: '1px solid rgba(17,131,230,0.3)',
+              borderRadius: '6px',
+              padding: '0.4rem 0.9rem',
             }}
           >
-            Déconnexion
-          </button>
-        </form>
+            Paramètres
+          </Link>
+
+          <form action={signOut}>
+            <button
+              type="submit"
+              style={{
+                background: 'transparent',
+                border: '1px solid rgba(255,255,255,0.1)',
+                borderRadius: '6px',
+                color: '#86868c',
+                fontSize: '0.8rem',
+                fontFamily: 'var(--font-space-mono), monospace',
+                letterSpacing: '0.06em',
+                padding: '0.4rem 0.9rem',
+                cursor: 'pointer',
+                textTransform: 'uppercase',
+              }}
+            >
+              Déconnexion
+            </button>
+          </form>
+        </div>
       </header>
 
       {/* Main content */}

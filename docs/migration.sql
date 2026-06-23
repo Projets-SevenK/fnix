@@ -111,3 +111,42 @@ BEGIN
     WHERE product_name = 'T-shirt FNIX Drop 044' AND size = 'M';
 END;
 $$;
+
+-- ============================================================
+-- Phase 5 — Extension admin_settings (mini-CMS produit)
+-- À exécuter manuellement dans le Supabase SQL Editor.
+-- ============================================================
+
+ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS product_description text;
+ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS product_status text NOT NULL DEFAULT 'available'
+  CHECK (product_status IN ('available', 'coming_soon', 'sold_out'));
+ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS wero_beneficiary_name text;
+ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS hero_image_url text;
+ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS product_image_main_url text;
+ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS product_image_secondary_1_url text;
+ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS product_image_secondary_2_url text;
+
+-- RPC : ajustement encadré du stock (met à jour remaining_stock ET is_available)
+CREATE OR REPLACE FUNCTION adjust_stock(p_remaining integer)
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+DECLARE
+  v_initial integer;
+BEGIN
+  SELECT initial_stock INTO v_initial
+    FROM product_stock
+    WHERE product_name = 'T-shirt FNIX Drop 044' AND size = 'M';
+
+  IF p_remaining < 0 OR p_remaining > v_initial THEN
+    RAISE EXCEPTION 'Valeur hors bornes (0 à %)', v_initial;
+  END IF;
+
+  UPDATE product_stock
+    SET remaining_stock = p_remaining,
+        is_available = (p_remaining > 0),
+        updated_at = now()
+    WHERE product_name = 'T-shirt FNIX Drop 044' AND size = 'M';
+END;
+$$;

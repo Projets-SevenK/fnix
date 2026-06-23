@@ -3,6 +3,7 @@ import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import OrderForm from '@/components/forms/order-form';
 import { getStock } from '@/lib/stock';
+import { getSettings } from '@/lib/settings';
 
 export const metadata: Metadata = {
   title: 'Commander — FNIX Drop 044',
@@ -11,12 +12,26 @@ export const metadata: Metadata = {
 };
 
 export default async function CommandePage() {
-  const stock = await getStock();
+  const [stock, settings] = await Promise.all([getStock(), getSettings()]);
 
   // Fallback values if Supabase is not yet configured
   const remainingStock = stock?.remaining_stock ?? 7;
   const initialStock = stock?.initial_stock ?? 7;
-  const isAvailable = stock !== null ? (stock.is_available && stock.remaining_stock > 0) : true;
+  const productStatus = settings?.product_status ?? 'available';
+
+  // Disabled if stock is exhausted OR if the drop status overrides availability
+  const stockAvailable = stock !== null ? (stock.is_available && stock.remaining_stock > 0) : true;
+  const isAvailable = stockAvailable && productStatus === 'available';
+
+  // Derive the unavailability message
+  const unavailableMessage: string | null =
+    productStatus === 'coming_soon'
+      ? 'Bientôt disponible'
+      : productStatus === 'sold_out'
+        ? 'Épuisé'
+        : !stockAvailable
+          ? 'Drop épuisé'
+          : null;
 
   const stockProgressWidth =
     initialStock > 0
@@ -97,17 +112,18 @@ export default async function CommandePage() {
           </p>
         </div>
 
-        {/* Order form — disabled if stock is exhausted */}
+        {/* Order form — disabled if stock is exhausted or drop status prevents ordering */}
         {isAvailable ? (
           <OrderForm />
         ) : (
           <div className="p-6 border border-white/[0.08] rounded-[8px] bg-[#0c0c0f] text-center">
             <p className="font-[family-name:var(--font-anton)] text-[1.5rem] text-[#f4f4f3] uppercase tracking-[1px] mb-2">
-              Drop épuisé
+              {unavailableMessage ?? 'Drop épuisé'}
             </p>
             <p className="font-[family-name:var(--font-archivo)] text-sm text-[#86868c]">
-              Toutes les pièces ont été réservées. Suis FNIX sur les réseaux
-              pour ne pas manquer le prochain drop.
+              {productStatus === 'coming_soon'
+                ? 'Le drop arrive bientôt. Suis FNIX sur les réseaux pour être le premier informé.'
+                : 'Toutes les pièces ont été réservées. Suis FNIX sur les réseaux pour ne pas manquer le prochain drop.'}
             </p>
           </div>
         )}
