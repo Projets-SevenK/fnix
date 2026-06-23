@@ -2,8 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 
 const followLinks = [
-  { href: "#", label: "Instagram" },
-  { href: "mailto:contact@fnix.fr", label: "Contact" },
+  { href: "https://www.instagram.com/fnix4.4?igsh=cjBtMDQ5OHludmNh", label: "Instagram" },
+  { href: "mailto:j.felixmadalena@gmail.com", label: "Contact" },
 ];
 
 const legalLinks = [
@@ -35,9 +35,11 @@ export default function Footer() {
               <Image
                 src="/fnix-logo.png"
                 alt="FNIX"
-                width={140}
-                height={38}
-                className="h-[38px] w-auto mb-4"
+                width={220}
+                height={62}
+                className="h-[62px] mb-4"
+                style={{ width: "auto" }}
+                unoptimized
               />
             </Link>
             <p className="font-[family-name:var(--font-anton)] text-[18px] text-[#cfcfd4] uppercase tracking-[1px]">

@@ -23,10 +23,12 @@ export default function Header() {
         <Image
           src="/fnix-logo.png"
           alt="FNIX"
-          width={120}
-          height={32}
-          className="h-8 w-auto"
+          width={200}
+          height={56}
+          className="h-14"
+          style={{ width: "auto" }}
           priority
+          unoptimized
         />
       </Link>
 

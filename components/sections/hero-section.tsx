@@ -40,8 +40,10 @@ export default function HeroSection({ heroImageUrl }: HeroSectionProps) {
             alt="FNIX"
             width={330}
             height={90}
-            className="w-[280px] md:w-[330px] max-w-[80%] mb-6 -ml-[6px]"
+            className="w-[330px] max-w-[80%] mb-6 ml-[-6px]"
+            style={{ height: "auto" }}
             priority
+            unoptimized
           />
 
           {/* Tagline */}
@@ -63,7 +65,7 @@ export default function HeroSection({ heroImageUrl }: HeroSectionProps) {
             <Button href="/commande" variant="primary">
               Commander la pièce
             </Button>
-            <Button href="#histoire" variant="secondary">
+            <Button href="/#histoire" variant="secondary">
               Découvrir l&apos;histoire
             </Button>
           </div>
