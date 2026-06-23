@@ -395,6 +395,7 @@ export default function ProductSettingsForm({ settings, stock }: ProductSettings
                       alt={label}
                       width={200}
                       height={150}
+                      unoptimized
                       style={{
                         width: '100%',
                         height: '150px',

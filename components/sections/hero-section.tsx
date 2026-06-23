@@ -78,6 +78,7 @@ export default function HeroSection({ heroImageUrl }: HeroSectionProps) {
               src={heroImageUrl}
               alt="T-shirt FNIX Drop 044"
               fill
+              unoptimized
               style={{ objectFit: 'cover' }}
               sizes="(max-width: 768px) 100vw, 330px"
             />

@@ -69,6 +69,7 @@ export default function ProductSection({
                   src={mainImageUrl}
                   alt="T-shirt FNIX Drop 044 — vue principale"
                   fill
+                  unoptimized
                   style={{ objectFit: 'cover' }}
                   sizes="(max-width: 1024px) 100vw, 55vw"
                 />
@@ -98,6 +99,7 @@ export default function ProductSection({
                   src={secondary1Url}
                   alt="T-shirt FNIX Drop 044 — vue secondaire 1"
                   fill
+                  unoptimized
                   style={{ objectFit: 'cover' }}
                   sizes="(max-width: 1024px) 50vw, 28vw"
                 />
@@ -126,6 +128,7 @@ export default function ProductSection({
                   src={secondary2Url}
                   alt="T-shirt FNIX Drop 044 — vue secondaire 2"
                   fill
+                  unoptimized
                   style={{ objectFit: 'cover' }}
                   sizes="(max-width: 1024px) 50vw, 28vw"
                 />
