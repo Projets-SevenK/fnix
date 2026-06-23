@@ -75,7 +75,7 @@ export default function MentionsLegalesPage() {
               Propriété intellectuelle
             </h2>
             <p>
-              L'ensemble des contenus présents sur ce site (textes, images, logo, visuels) sont la propriété
+              L&apos;ensemble des contenus présents sur ce site (textes, images, logo, visuels) sont la propriété
               exclusive de Felix madalena Jônantas. Toute reproduction, distribution ou utilisation sans
               autorisation préalable est interdite.
             </p>
@@ -86,7 +86,7 @@ export default function MentionsLegalesPage() {
               Données personnelles
             </h2>
             <p>
-              Les informations collectées lors d'une commande sont traitées conformément à notre{" "}
+              Les informations collectées lors d&apos;une commande sont traitées conformément à notre{" "}
               <a href="/confidentialite" className="text-[#1183E6] hover:text-[#2e97f5] transition-colors">
                 politique de confidentialité
               </a>

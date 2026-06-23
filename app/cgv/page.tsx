@@ -63,7 +63,7 @@ export default function CGVPage() {
               La commande est passée via le formulaire disponible sur le site. Elle est enregistrée
               avec le statut <strong className="text-[#cfcfd4]">en attente</strong> et une référence
               unique de type <span className="font-[family-name:var(--font-space-mono)] text-[#cfcfd4]">FNIX-044-XXX</span>.
-              La commande n'est définitive qu'après réception et vérification du paiement.
+              La commande n&apos;est définitive qu&apos;après réception et vérification du paiement.
             </p>
           </section>
 
@@ -72,10 +72,10 @@ export default function CGVPage() {
               5. Paiement
             </h2>
             <p>
-              Le paiement s'effectue manuellement via <strong className="text-[#cfcfd4]">Wero</strong>.
-              Après validation du formulaire, l'acheteur reçoit les instructions de paiement avec
-              le montant exact et la référence de commande à mentionner. Le paiement n'est pas
-              automatique. Aucune donnée bancaire n'est collectée par le site.
+              Le paiement s&apos;effectue manuellement via <strong className="text-[#cfcfd4]">Wero</strong>.
+              Après validation du formulaire, l&apos;acheteur reçoit les instructions de paiement avec
+              le montant exact et la référence de commande à mentionner. Le paiement n&apos;est pas
+              automatique. Aucune donnée bancaire n&apos;est collectée par le site.
             </p>
           </section>
 
@@ -84,8 +84,8 @@ export default function CGVPage() {
               6. Disponibilité et stock
             </h2>
             <p>
-              Les commandes sont acceptées dans la limite du stock disponible. En cas d'épuisement du
-              stock après validation de la commande, l'acheteur en sera informé et remboursé intégralement.
+              Les commandes sont acceptées dans la limite du stock disponible. En cas d&apos;épuisement du
+              stock après validation de la commande, l&apos;acheteur en sera informé et remboursé intégralement.
             </p>
           </section>
 
@@ -105,10 +105,10 @@ export default function CGVPage() {
               8. Droit de rétractation
             </h2>
             <p>
-              Conformément aux articles L221-18 et suivants du Code de la consommation, l'acheteur
-              dispose d'un délai de <strong className="text-[#cfcfd4]">14 jours</strong> à compter de
+              Conformément aux articles L221-18 et suivants du Code de la consommation, l&apos;acheteur
+              dispose d&apos;un délai de <strong className="text-[#cfcfd4]">14 jours</strong> à compter de
               la réception du produit pour exercer son droit de rétractation, sans avoir à justifier
-              de motifs. Le retour est à la charge de l'acheteur. Le remboursement intervient dans
+              de motifs. Le retour est à la charge de l&apos;acheteur. Le remboursement intervient dans
               les 14 jours suivant la réception du produit retourné.
             </p>
             <p className="mt-3">
@@ -139,8 +139,8 @@ export default function CGVPage() {
               <a href="mailto:j.felixmadalena@gmail.com" className="text-[#1183E6] hover:text-[#2e97f5] transition-colors">
                 j.felixmadalena@gmail.com
               </a>
-              . En cas de litige non résolu à l'amiable, l'acheteur peut recourir à une médiation
-              de la consommation conformément à l'article L612-1 du Code de la consommation.
+              . En cas de litige non résolu à l&apos;amiable, l&apos;acheteur peut recourir à une médiation
+              de la consommation conformément à l&apos;article L612-1 du Code de la consommation.
             </p>
           </section>
 

@@ -37,7 +37,7 @@ export default function ConfidentialitePage() {
             <h2 className="font-[family-name:var(--font-anton)] text-[1.1rem] text-[#f4f4f3] uppercase tracking-[1px] mb-3">
               2. Données collectées
             </h2>
-            <p>Lors d'une commande, les données suivantes sont collectées :</p>
+            <p>Lors d&apos;une commande, les données suivantes sont collectées :</p>
             <ul className="mt-3 space-y-1 list-disc list-inside pl-2">
               <li>Prénom et nom</li>
               <li>Adresse email</li>
@@ -46,8 +46,8 @@ export default function ConfidentialitePage() {
               <li>Note optionnelle liée à la commande</li>
             </ul>
             <p className="mt-3">
-              Aucune donnée bancaire n'est collectée. Le paiement est réalisé directement
-              via l'application Wero, externe à ce site.
+              Aucune donnée bancaire n&apos;est collectée. Le paiement est réalisé directement
+              via l&apos;application Wero, externe à ce site.
             </p>
           </section>
 
@@ -58,8 +58,8 @@ export default function ConfidentialitePage() {
             <p>Les données sont utilisées exclusivement pour :</p>
             <ul className="mt-3 space-y-1 list-disc list-inside pl-2">
               <li>Le traitement et le suivi de la commande</li>
-              <li>La préparation et l'expédition du colis</li>
-              <li>La communication avec l'acheteur relative à sa commande</li>
+              <li>La préparation et l&apos;expédition du colis</li>
+              <li>La communication avec l&apos;acheteur relative à sa commande</li>
             </ul>
             <p className="mt-3">
               Les données ne sont utilisées à aucune fin commerciale ou marketing.
@@ -71,7 +71,7 @@ export default function ConfidentialitePage() {
               4. Base légale
             </h2>
             <p>
-              Le traitement est fondé sur l'exécution du contrat de vente (article 6.1.b du RGPD).
+              Le traitement est fondé sur l&apos;exécution du contrat de vente (article 6.1.b du RGPD).
             </p>
           </section>
 
@@ -91,11 +91,11 @@ export default function ConfidentialitePage() {
               6. Destinataires des données
             </h2>
             <p>
-              Les données sont accessibles uniquement par l'éditeur du site. Elles sont hébergées
+              Les données sont accessibles uniquement par l&apos;éditeur du site. Elles sont hébergées
               par <strong className="text-[#cfcfd4]">Supabase</strong> (serveurs en Europe) et
               par <strong className="text-[#cfcfd4]">Vercel Inc.</strong> (États-Unis), dans le
               cadre du fonctionnement technique du site. Ces prestataires agissent en qualité de
-              sous-traitants et ne sont pas autorisés à utiliser les données à d'autres fins.
+              sous-traitants et ne sont pas autorisés à utiliser les données à d&apos;autres fins.
             </p>
           </section>
 
@@ -104,7 +104,7 @@ export default function ConfidentialitePage() {
               7. Transferts hors UE
             </h2>
             <p>
-              L'hébergement du site via Vercel implique un transfert de données vers les États-Unis.
+              L&apos;hébergement du site via Vercel implique un transfert de données vers les États-Unis.
               Ce transfert est encadré par les clauses contractuelles types de la Commission
               européenne.
             </p>
@@ -115,7 +115,7 @@ export default function ConfidentialitePage() {
               8. Cookies
             </h2>
             <p>
-              Ce site n'utilise pas de cookies publicitaires ou de tracking. Seuls des cookies
+              Ce site n&apos;utilise pas de cookies publicitaires ou de tracking. Seuls des cookies
               techniques strictement nécessaires au fonctionnement du site peuvent être déposés.
             </p>
           </section>
@@ -128,23 +128,23 @@ export default function ConfidentialitePage() {
               Conformément au RGPD, vous disposez des droits suivants sur vos données personnelles :
             </p>
             <ul className="mt-3 space-y-1 list-disc list-inside pl-2">
-              <li>Droit d'accès</li>
+              <li>Droit d&apos;accès</li>
               <li>Droit de rectification</li>
-              <li>Droit à l'effacement (droit à l'oubli)</li>
+              <li>Droit à l&apos;effacement (droit à l&apos;oubli)</li>
               <li>Droit à la limitation du traitement</li>
               <li>Droit à la portabilité</li>
-              <li>Droit d'opposition</li>
+              <li>Droit d&apos;opposition</li>
             </ul>
             <p className="mt-3">
               Pour exercer ces droits, contactez :{" "}
               <a href="mailto:j.felixmadalena@gmail.com" className="text-[#1183E6] hover:text-[#2e97f5] transition-colors">
                 j.felixmadalena@gmail.com
               </a>
-              . Une réponse sera apportée dans un délai d'un mois.
+              . Une réponse sera apportée dans un délai d&apos;un mois.
             </p>
             <p className="mt-3">
               Vous pouvez également introduire une réclamation auprès de la{" "}
-              <strong className="text-[#cfcfd4]">CNIL</strong> (Commission Nationale de l'Informatique
+              <strong className="text-[#cfcfd4]">CNIL</strong> (Commission Nationale de l&apos;Informatique
               et des Libertés) si vous estimez que vos droits ne sont pas respectés.
             </p>
           </section>
