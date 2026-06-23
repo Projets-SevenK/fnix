@@ -40,6 +40,7 @@ export async function updateSettings(
   // Whitelist: never allow image fields or id/updated_at to be set via this action
   const safeFields: (keyof AdminSettings)[] = [
     'product_description',
+    'product_back_message',
     'product_status',
     'product_price',
     'shipping_price',
@@ -146,6 +147,43 @@ export async function uploadProductImage(
  * The RPC enforces bounds (0 to initial_stock) and updates is_available.
  * This does NOT bypass the mark_order_paid rule — it is only for manual corrections.
  */
+export async function updateInitialStock(
+  initial: number
+): Promise<{ success: boolean; error?: string }> {
+  const user = await getAdminUser();
+  if (!user) return { success: false, error: 'Non autorisé.' };
+
+  if (!Number.isInteger(initial) || initial < 1) {
+    return { success: false, error: 'Stock initial invalide (minimum 1).' };
+  }
+
+  // Fetch current remaining to cap it if needed
+  const { data: currentStock } = await supabaseServer
+    .from('product_stock')
+    .select('remaining_stock')
+    .eq('product_name', 'T-shirt FNIX Drop 044')
+    .single();
+
+  const remaining = Math.min(currentStock?.remaining_stock ?? initial, initial);
+
+  const { error } = await supabaseServer
+    .from('product_stock')
+    .update({
+      initial_stock: initial,
+      remaining_stock: remaining,
+      is_available: remaining > 0,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('product_name', 'T-shirt FNIX Drop 044');
+
+  if (error) {
+    console.error('[updateInitialStock] error:', error.message);
+    return { success: false, error: 'Erreur base de données.' };
+  }
+
+  return { success: true };
+}
+
 export async function adjustStock(
   remaining: number
 ): Promise<{ success: boolean; error?: string }> {

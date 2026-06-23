@@ -126,6 +126,9 @@ ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS product_image_main_url text;
 ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS product_image_secondary_1_url text;
 ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS product_image_secondary_2_url text;
 
+-- Phase 6 — Champs supplémentaires admin_settings
+ALTER TABLE admin_settings ADD COLUMN IF NOT EXISTS product_back_message text;
+
 -- RPC : ajustement encadré du stock (met à jour remaining_stock ET is_available)
 CREATE OR REPLACE FUNCTION adjust_stock(p_remaining integer)
 RETURNS void

@@ -4,7 +4,7 @@ import { useRef, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import type { AdminSettings, ProductStock } from '@/types/database';
-import { updateSettings, uploadProductImage, adjustStock } from '@/app/admin/produit/actions';
+import { updateSettings, uploadProductImage, adjustStock, updateInitialStock } from '@/app/admin/produit/actions';
 
 interface ProductSettingsFormProps {
   settings: AdminSettings;
@@ -100,12 +100,15 @@ export default function ProductSettingsForm({ settings, stock }: ProductSettings
   const [statusFeedback, setStatusFeedback] = useState<FeedbackState>(null);
   const [isPendingStatus, startStatusTransition] = useTransition();
 
-  // Section 2 — Price and description
+  // Section 2 — Price, description, back message
   const [productPrice, setProductPrice] = useState<string>(
     String(settings.product_price ?? '44.00')
   );
   const [productDescription, setProductDescription] = useState<string>(
     settings.product_description ?? ''
+  );
+  const [productBackMessage, setProductBackMessage] = useState<string>(
+    settings.product_back_message ?? ''
   );
   const [descFeedback, setDescFeedback] = useState<FeedbackState>(null);
   const [isPendingDesc, startDescTransition] = useTransition();
@@ -130,10 +133,12 @@ export default function ProductSettingsForm({ settings, stock }: ProductSettings
   const [isPendingWero, startWeroTransition] = useTransition();
 
   // Section 5 — Stock
-  const initialStock = stock?.initial_stock ?? 7;
+  const [initialStockValue, setInitialStockValue] = useState<number>(stock?.initial_stock ?? 7);
   const [stockValue, setStockValue] = useState<number>(stock?.remaining_stock ?? 0);
   const [stockFeedback, setStockFeedback] = useState<FeedbackState>(null);
+  const [initialStockFeedback, setInitialStockFeedback] = useState<FeedbackState>(null);
   const [isPendingStock, startStockTransition] = useTransition();
+  const [isPendingInitialStock, startInitialStockTransition] = useTransition();
 
   const fileInputRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
@@ -163,10 +168,11 @@ export default function ProductSettingsForm({ settings, stock }: ProductSettings
       const result = await updateSettings({
         product_price: price,
         product_description: productDescription || null,
+        product_back_message: productBackMessage || null,
       });
       setDescFeedback(
         result.success
-          ? { success: true, message: 'Prix et description mis à jour.' }
+          ? { success: true, message: 'Prix, description et message dos mis à jour.' }
           : { success: false, message: result.error ?? 'Erreur inconnue.' }
       );
       if (result.success) router.refresh();
@@ -219,6 +225,23 @@ export default function ProductSettingsForm({ settings, stock }: ProductSettings
   }
 
   // Handlers — Section 5
+  function handleInitialStockUpdate() {
+    const confirmed = window.confirm(
+      `Définir le stock total à ${initialStockValue} pièce(s) ?\n\nSi le stock restant est supérieur à cette valeur, il sera automatiquement réduit.`
+    );
+    if (!confirmed) return;
+    startInitialStockTransition(async () => {
+      setInitialStockFeedback(null);
+      const result = await updateInitialStock(initialStockValue);
+      setInitialStockFeedback(
+        result.success
+          ? { success: true, message: `Stock total défini à ${initialStockValue} pièce(s).` }
+          : { success: false, message: result.error ?? 'Erreur inconnue.' }
+      );
+      if (result.success) router.refresh();
+    });
+  }
+
   function handleStockAdjust() {
     const confirmed = window.confirm(
       `Confirmer l'ajustement du stock à ${stockValue} pièce(s) ?\n\nCette action modifie directement le stock. La règle de décrémentation automatique reste active.`
@@ -324,6 +347,19 @@ export default function ProductSettingsForm({ settings, stock }: ProductSettings
               resize: 'vertical',
               fontFamily: 'var(--font-archivo), sans-serif',
             }}
+          />
+        </div>
+        <div style={{ marginTop: '1rem' }}>
+          <label style={labelStyle} htmlFor="product-back-message">
+            Message au dos du t-shirt
+          </label>
+          <input
+            id="product-back-message"
+            type="text"
+            value={productBackMessage}
+            onChange={(e) => setProductBackMessage(e.target.value)}
+            placeholder="ex: Respect. Ambition. Évolution."
+            style={inputStyle}
           />
         </div>
         <button
@@ -494,7 +530,7 @@ export default function ProductSettingsForm({ settings, stock }: ProductSettings
             fontFamily: 'var(--font-anton), sans-serif',
             fontSize: '1.6rem',
             letterSpacing: '0.02em',
-            margin: '0 0 1rem',
+            margin: '0 0 1.5rem',
             color:
               (stock?.remaining_stock ?? 0) === 0
                 ? '#ef4444'
@@ -511,18 +547,43 @@ export default function ProductSettingsForm({ settings, stock }: ProductSettings
               fontFamily: 'var(--font-archivo), sans-serif',
             }}
           >
-            {' '}/ {initialStock} pièces
+            {' '}/ {initialStockValue} pièces
           </span>
         </p>
-        <div style={{ marginBottom: '0.75rem' }}>
+
+        {/* Stock total (initial) */}
+        <div style={{ marginBottom: '1.5rem', paddingBottom: '1.5rem', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+          <label style={labelStyle} htmlFor="initial-stock-value">
+            Stock total (pièces commandées au fournisseur)
+          </label>
+          <input
+            id="initial-stock-value"
+            type="number"
+            min={1}
+            value={initialStockValue}
+            onChange={(e) => setInitialStockValue(Number(e.target.value))}
+            style={{ ...inputStyle, maxWidth: '120px' }}
+          />
+          <button
+            onClick={handleInitialStockUpdate}
+            disabled={isPendingInitialStock}
+            style={isPendingInitialStock ? { ...disabledButtonStyle, marginTop: '0.75rem' } : { ...saveButtonStyle, marginTop: '0.75rem' }}
+          >
+            {isPendingInitialStock ? 'Enregistrement...' : 'Enregistrer'}
+          </button>
+          <FeedbackMessage feedback={initialStockFeedback} />
+        </div>
+
+        {/* Stock restant (correction manuelle) */}
+        <div>
           <label style={labelStyle} htmlFor="stock-value">
-            Nouveau stock (0 à {initialStock})
+            Correction du stock restant (0 à {initialStockValue})
           </label>
           <input
             id="stock-value"
             type="number"
             min={0}
-            max={initialStock}
+            max={initialStockValue}
             value={stockValue}
             onChange={(e) => setStockValue(Number(e.target.value))}
             style={{ ...inputStyle, maxWidth: '120px' }}
@@ -537,11 +598,10 @@ export default function ProductSettingsForm({ settings, stock }: ProductSettings
             border: '1px solid rgba(251,146,60,0.2)',
             borderRadius: '6px',
             padding: '0.6rem 0.9rem',
-            marginBottom: '0.75rem',
+            margin: '0.75rem 0',
           }}
         >
-          Cette action modifie directement le stock. La règle de décrémentation automatique reste
-          active.
+          Réservé aux corrections d&apos;erreur. La règle de décrémentation automatique reste active.
         </p>
         <button
           onClick={handleStockAdjust}
@@ -557,7 +617,7 @@ export default function ProductSettingsForm({ settings, stock }: ProductSettings
                 }
           }
         >
-          {isPendingStock ? 'Ajustement...' : 'Ajuster'}
+          {isPendingStock ? 'Ajustement...' : 'Ajuster le stock restant'}
         </button>
         <FeedbackMessage feedback={stockFeedback} />
       </div>

@@ -6,23 +6,30 @@ interface ProductSectionProps {
   secondary1Url?: string | null;
   secondary2Url?: string | null;
   description?: string | null;
+  price?: number | null;
+  backMessage?: string | null;
+  remainingStock?: number | null;
 }
-
-const productDetails = [
-  { label: "Couleur", value: "Une seule" },
-  { label: "Avant", value: "Logo FNIX" },
-  { label: "Dos", value: "Message à valider" },
-  { label: "Taille disponible", value: "M uniquement" },
-  { label: "Stock", value: "7 pièces", accent: true },
-  { label: "Livraison", value: "La Poste" },
-];
 
 export default function ProductSection({
   mainImageUrl,
   secondary1Url,
   secondary2Url,
   description,
+  price,
+  backMessage,
+  remainingStock,
 }: ProductSectionProps) {
+  const stockLabel = remainingStock != null ? `${remainingStock} pièce${remainingStock > 1 ? 's' : ''}` : '7 pièces';
+
+  const productDetails = [
+    { label: "Couleur", value: "Une seule" },
+    { label: "Avant", value: "Logo FNIX" },
+    { label: "Dos", value: backMessage ?? "Inscription FNIX" },
+    { label: "Taille disponible", value: "M uniquement" },
+    { label: "Stock", value: stockLabel, accent: true },
+    { label: "Livraison", value: "La Poste" },
+  ];
   return (
     <section
       id="produit"
@@ -151,7 +158,9 @@ export default function ProductSection({
             </div>
             <p className="font-[family-name:var(--font-archivo)] text-[15px] text-[#9a9aa0] mb-6">
               Prix{" "}
-              <span className="text-[#e6e6e8] font-semibold">à confirmer</span>
+              <span className="text-[#e6e6e8] font-semibold">
+                {price != null ? `${price} €` : "à confirmer"}
+              </span>
             </p>
 
             {/* Details list */}

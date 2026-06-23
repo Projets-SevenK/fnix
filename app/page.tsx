@@ -8,11 +8,12 @@ import ValuesSection from "@/components/sections/values-section";
 import OrderSection from "@/components/sections/order-section";
 import FaqSection from "@/components/sections/faq-section";
 import { getSettings } from "@/lib/settings";
+import { getStock } from "@/lib/stock";
 
 export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
-  const settings = await getSettings();
+  const [settings, stock] = await Promise.all([getSettings(), getStock()]);
 
   return (
     <>
@@ -25,6 +26,9 @@ export default async function HomePage() {
           secondary1Url={settings?.product_image_secondary_1_url ?? null}
           secondary2Url={settings?.product_image_secondary_2_url ?? null}
           description={settings?.product_description ?? null}
+          price={settings?.product_price ?? null}
+          backMessage={settings?.product_back_message ?? null}
+          remainingStock={stock?.remaining_stock ?? null}
         />
         <StorySection />
         <ValuesSection />

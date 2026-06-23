@@ -46,4 +46,5 @@ export type AdminSettings = {
   product_image_main_url: string | null;
   product_image_secondary_1_url: string | null;
   product_image_secondary_2_url: string | null;
+  product_back_message: string | null;
 };
