@@ -1,22 +1,12 @@
 'use client';
 
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { orderSchema, type OrderFormValues } from '@/lib/validations/order';
-import { generateReference } from '@/lib/references';
+import { submitOrder } from '@/app/commande/actions';
 import Button from '@/components/ui/button';
-
-/**
- * Phase 2 helper: generates a random order number between 1 and 999.
- * Defined at module scope to avoid the react-hooks/purity lint rule.
- * Phase 3 will replace this with a Supabase COUNT query.
- */
-function getRandomOrderNumber(): number {
-  const array = new Uint16Array(1);
-  crypto.getRandomValues(array);
-  return (array[0]! % 999) + 1;
-}
 
 const inputClasses =
   'w-full bg-[#0c0c0f] border border-white/[0.08] text-[#f4f4f3] rounded-[6px] px-4 py-3 text-sm transition-colors placeholder:text-[#5a5a60] focus:outline-none focus:border-[#1183E6] focus:bg-[#0e0e12]';
@@ -37,6 +27,7 @@ function FieldError({ message }: FieldErrorProps) {
 
 export default function OrderForm() {
   const router = useRouter();
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const {
     register,
@@ -49,12 +40,17 @@ export default function OrderForm() {
     },
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async function onSubmit(_formData: OrderFormValues) {
-    const orderNumber = getRandomOrderNumber();
-    const reference = generateReference(orderNumber);
+  async function onSubmit(formData: OrderFormValues) {
+    setSubmitError(null);
 
-    router.push(`/commande/confirmation?ref=${encodeURIComponent(reference)}`);
+    const result = await submitOrder(formData);
+
+    if ('error' in result) {
+      setSubmitError(result.error);
+      return;
+    }
+
+    router.push(`/commande/confirmation?ref=${encodeURIComponent(result.reference)}`);
   }
 
   return (
@@ -187,7 +183,7 @@ export default function OrderForm() {
       </div>
 
       {/* Submit */}
-      <div className="pt-2">
+      <div className="pt-2 flex flex-col gap-3">
         <Button
           type="submit"
           variant="primary"
@@ -196,6 +192,15 @@ export default function OrderForm() {
         >
           {isSubmitting ? 'Envoi en cours...' : 'Passer ma commande'}
         </Button>
+
+        {submitError !== null && (
+          <p
+            role="alert"
+            className="font-[family-name:var(--font-archivo)] text-sm text-[#ff6b6b]"
+          >
+            {submitError}
+          </p>
+        )}
       </div>
     </form>
   );

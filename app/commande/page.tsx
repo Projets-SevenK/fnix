@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import OrderForm from '@/components/forms/order-form';
+import { getStock } from '@/lib/stock';
 
 export const metadata: Metadata = {
   title: 'Commander — FNIX Drop 044',
@@ -9,7 +10,26 @@ export const metadata: Metadata = {
     'Commandez le T-shirt FNIX Drop 044, taille M. 7 pièces disponibles. Paiement via Wero.',
 };
 
-export default function CommandePage() {
+export default async function CommandePage() {
+  const stock = await getStock();
+
+  // Fallback values if Supabase is not yet configured
+  const remainingStock = stock?.remaining_stock ?? 7;
+  const initialStock = stock?.initial_stock ?? 7;
+  const isAvailable = stock !== null ? (stock.is_available && stock.remaining_stock > 0) : true;
+
+  const stockProgressWidth =
+    initialStock > 0
+      ? `${Math.round((remainingStock / initialStock) * 100)}%`
+      : '0%';
+
+  const stockLabel =
+    remainingStock > 1
+      ? `${remainingStock} pièces restantes`
+      : remainingStock === 1
+        ? '1 pièce restante'
+        : 'Épuisé';
+
   return (
     <>
       <Header />
@@ -46,16 +66,27 @@ export default function CommandePage() {
           {/* Stock indicator */}
           <div className="mt-4 flex items-center gap-3">
             <div className="flex-1 h-[3px] rounded-full bg-white/[0.06]">
-              <div className="h-full w-full rounded-full bg-[#1183E6]" />
+              <div
+                className="h-full rounded-full bg-[#1183E6] transition-all duration-500"
+                style={{ width: stockProgressWidth }}
+              />
             </div>
             <span className="flex items-center gap-2 shrink-0">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#1183E6] opacity-60" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-[#1183E6]" />
-              </span>
-              <span className="font-[family-name:var(--font-space-mono)] text-[11px] text-[#cfcfd4] tracking-[1px] uppercase">
-                7 pièces restantes
-              </span>
+              {isAvailable ? (
+                <>
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#1183E6] opacity-60" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-[#1183E6]" />
+                  </span>
+                  <span className="font-[family-name:var(--font-space-mono)] text-[11px] text-[#cfcfd4] tracking-[1px] uppercase">
+                    {stockLabel}
+                  </span>
+                </>
+              ) : (
+                <span className="font-[family-name:var(--font-space-mono)] text-[11px] text-[#ff6b6b] tracking-[1px] uppercase">
+                  Épuisé
+                </span>
+              )}
             </span>
           </div>
 
@@ -66,8 +97,20 @@ export default function CommandePage() {
           </p>
         </div>
 
-        {/* Order form */}
-        <OrderForm />
+        {/* Order form — disabled if stock is exhausted */}
+        {isAvailable ? (
+          <OrderForm />
+        ) : (
+          <div className="p-6 border border-white/[0.08] rounded-[8px] bg-[#0c0c0f] text-center">
+            <p className="font-[family-name:var(--font-anton)] text-[1.5rem] text-[#f4f4f3] uppercase tracking-[1px] mb-2">
+              Drop épuisé
+            </p>
+            <p className="font-[family-name:var(--font-archivo)] text-sm text-[#86868c]">
+              Toutes les pièces ont été réservées. Suis FNIX sur les réseaux
+              pour ne pas manquer le prochain drop.
+            </p>
+          </div>
+        )}
       </main>
 
       <Footer />
