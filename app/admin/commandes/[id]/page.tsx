@@ -1,7 +1,9 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getOrderById } from '@/lib/orders';
+import { getSettings } from '@/lib/settings';
 import OrderActions from '@/components/admin/order-actions';
+import MessageTemplates from '@/components/admin/message-templates';
 import type { PaymentStatus, ShippingStatus } from '@/types/database';
 
 interface OrderDetailPageProps {
@@ -106,11 +108,36 @@ function InfoRow({ label, value }: { label: string; value: string }) {
 
 export default async function OrderDetailPage({ params }: OrderDetailPageProps) {
   const { id } = await params;
-  const order = await getOrderById(id);
+  const [order, settings] = await Promise.all([getOrderById(id), getSettings()]);
 
   if (!order) {
     notFound();
   }
+
+  const prenom = order.customer_first_name;
+  const ref = order.reference ?? 'FNIX-044-XXX';
+  const montant = `${order.amount_expected} €`;
+  const wero = settings?.wero_phone ?? '[numéro Wero]';
+  const suivi = order.tracking_number ?? '[numéro de suivi]';
+
+  const messageTemplates = [
+    {
+      label: 'En attente de paiement',
+      text: `Bonjour ${prenom} ! Merci pour ta commande FNIX 🙏\n\nRéférence : ${ref}\nMontant : ${montant}\n\nPour finaliser, envoie le paiement via Wero au ${wero}. Indique bien ta référence ${ref} dans le message Wero.\n\nOn traite ta commande dès réception du paiement. — FNIX`,
+    },
+    {
+      label: 'Paiement reçu',
+      text: `Bonjour ${prenom} ! On a bien reçu ton paiement pour la commande ${ref} 🎉\n\nTon t-shirt est en cours de préparation. Tu recevras ton numéro de suivi La Poste dès l'expédition.\n\nMerci pour ta confiance ! — FNIX`,
+    },
+    {
+      label: 'Commande expédiée',
+      text: `Bonjour ${prenom} ! Ta commande ${ref} est en route 📦\n\nNuméro de suivi La Poste : ${suivi}\n\nTu peux suivre ton colis sur laposte.fr\n\nÀ très vite ! — FNIX`,
+    },
+    {
+      label: 'Commande annulée',
+      text: `Bonjour ${prenom}, nous sommes désolés mais ta commande ${ref} a dû être annulée.\n\nSi tu as effectué un paiement, tu seras remboursé(e) rapidement. N'hésite pas à nous contacter pour toute question. — FNIX`,
+    },
+  ];
 
   return (
     <div style={{ minHeight: '100vh', background: '#060608', color: '#f4f4f3' }}>
@@ -330,6 +357,7 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
             border: '1px solid rgba(255,255,255,0.08)',
             borderRadius: '10px',
             padding: '1.5rem',
+            marginBottom: '1.25rem',
           }}
         >
           <h2
@@ -345,6 +373,30 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
             Actions
           </h2>
           <OrderActions order={order} />
+        </section>
+
+        {/* Messages copier/coller */}
+        <section
+          style={{
+            background: '#0c0c0f',
+            border: '1px solid rgba(255,255,255,0.08)',
+            borderRadius: '10px',
+            padding: '1.5rem',
+          }}
+        >
+          <h2
+            style={{
+              fontFamily: 'var(--font-space-mono), monospace',
+              fontSize: '0.65rem',
+              color: '#86868c',
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+              margin: '0 0 1.25rem',
+            }}
+          >
+            Messages client
+          </h2>
+          <MessageTemplates messages={messageTemplates} />
         </section>
       </main>
     </div>
