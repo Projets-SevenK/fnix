@@ -9,6 +9,8 @@ import OrderSection from "@/components/sections/order-section";
 import FaqSection from "@/components/sections/faq-section";
 import { getSettings } from "@/lib/settings";
 
+export const dynamic = 'force-dynamic';
+
 export default async function HomePage() {
   const settings = await getSettings();
 
@@ -26,7 +28,7 @@ export default async function HomePage() {
         />
         <StorySection />
         <ValuesSection />
-        <OrderSection />
+        <OrderSection price={settings?.product_price ?? null} />
         <FaqSection />
       </main>
       <Footer />

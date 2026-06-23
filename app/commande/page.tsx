@@ -5,6 +5,8 @@ import OrderForm from '@/components/forms/order-form';
 import { getStock } from '@/lib/stock';
 import { getSettings } from '@/lib/settings';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Commander — FNIX Drop 044',
   description:
@@ -18,6 +20,7 @@ export default async function CommandePage() {
   const remainingStock = stock?.remaining_stock ?? 7;
   const initialStock = stock?.initial_stock ?? 7;
   const productStatus = settings?.product_status ?? 'available';
+  const productPrice = settings?.product_price ?? 44;
 
   // Disabled if stock is exhausted OR if the drop status overrides availability
   const stockAvailable = stock !== null ? (stock.is_available && stock.remaining_stock > 0) : true;
@@ -70,7 +73,7 @@ export default async function CommandePage() {
             </span>
             <span className="text-white/[0.2]">·</span>
             <span className="font-[family-name:var(--font-anton)] text-[18px] text-[#f4f4f3]">
-              44 €
+              {productPrice} €
             </span>
             <span className="text-white/[0.2]">·</span>
             <span className="font-[family-name:var(--font-archivo)] text-sm text-[#86868c]">

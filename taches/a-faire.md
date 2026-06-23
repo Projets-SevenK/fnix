@@ -60,3 +60,7 @@
 - [ ] Ajouter les pages légales.
 - [ ] Tester mobile.
 - [ ] Déployer sur Vercel.
+- [ ] Ajouter des messages copier/coller dans le détail commande admin (pending, paid, shipped, cancelled).
+
+## Optionnel — après acquisition d'un nom de domaine
+- [ ] Emails transactionnels automatiques (Resend ou Brevo) : confirmation commande, paiement validé, expédition, annulation.

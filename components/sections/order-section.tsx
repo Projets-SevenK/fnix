@@ -23,17 +23,21 @@ const steps = [
   },
 ];
 
-const orderSummary = [
-  { label: "Produit", value: "T-shirt FNIX" },
-  { label: "Drop", value: "044", mono: true, accent: true },
-  { label: "Taille", value: "M uniquement", bold: true },
-  { label: "Stock disponible", value: "7 pièces", accent: true },
-  { label: "Paiement", value: "Wero · manuel" },
-  { label: "Livraison", value: "La Poste" },
-  { label: "Statut", value: "validée après paiement", italic: true, dim: true },
-];
+interface OrderSectionProps {
+  price?: number | null;
+}
 
-export default function OrderSection() {
+export default function OrderSection({ price }: OrderSectionProps) {
+  const orderSummary = [
+    { label: "Produit", value: "T-shirt FNIX" },
+    { label: "Drop", value: "044", mono: true, accent: true },
+    { label: "Taille", value: "M uniquement", bold: true },
+    { label: "Prix", value: `${price ?? 44}€`, bold: true },
+    { label: "Stock disponible", value: "7 pièces", accent: true },
+    { label: "Paiement", value: "Wero · manuel" },
+    { label: "Livraison", value: "La Poste" },
+    { label: "Statut", value: "validée après paiement", italic: true, dim: true },
+  ];
   return (
     <section
       id="commander"

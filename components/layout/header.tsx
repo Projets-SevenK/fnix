@@ -2,10 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 
 const navLinks = [
-  { href: "#produit", label: "La pièce" },
-  { href: "#histoire", label: "Histoire" },
-  { href: "#commander", label: "Modalités" },
-  { href: "#faq", label: "FAQ" },
+  { href: "/#produit", label: "La pièce" },
+  { href: "/#histoire", label: "Histoire" },
+  { href: "/#commander", label: "Modalités" },
+  { href: "/#faq", label: "FAQ" },
 ];
 
 export default function Header() {

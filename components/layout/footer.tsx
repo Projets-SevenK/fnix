@@ -81,6 +81,9 @@ export default function Footer() {
         {/* Bottom row */}
         <div className="flex flex-wrap justify-between gap-[10px] pt-[22px] border-t border-white/[0.07] font-[family-name:var(--font-space-mono)] text-[12px] text-[#56565c] tracking-[1px]">
           <span>© 2026 FNIX · DROP 044</span>
+          <Link href="/admin" className="text-[#56565c] hover:text-[#9a9aa0] transition-colors no-underline">
+            Admin
+          </Link>
           <span>FNIX-BRAND.FR</span>
         </div>
       </div>

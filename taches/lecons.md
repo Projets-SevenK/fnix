@@ -15,3 +15,5 @@
 - Le dossier `prototype/` est la référence visuelle validée par le client.
 - Le bleu doit rester une couleur d’accent, pas dominer la page.
 - Le 44 doit être visible, mais ne pas voler la place du logo FNIX.
+- Pas d’emails transactionnels automatiques en V1 : le client n’a pas encore de nom de domaine. Resend et Brevo nécessitent un domaine vérifié. À la place : page de confirmation claire, référence visible, instructions Wero complètes, et messages copier/coller dans le dashboard admin pour contact manuel (WhatsApp, SMS, Instagram, email).
+- Les pages qui appellent `getSettings()` doivent avoir `export const dynamic = ‘force-dynamic’` pour que les changements du dashboard soient reflétés immédiatement sans redéploiement.
