@@ -4,6 +4,8 @@ import { getStock } from '@/lib/stock';
 import { signOut } from './actions';
 import type { PaymentStatus, ShippingStatus } from '@/types/database';
 
+export const dynamic = 'force-dynamic';
+
 function paymentBadgeStyle(status: PaymentStatus): React.CSSProperties {
   switch (status) {
     case 'pending':

@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { getOrderById } from '@/lib/orders';
 import { getSettings } from '@/lib/settings';
 import OrderActions from '@/components/admin/order-actions';
+
+export const dynamic = 'force-dynamic';
 import MessageTemplates from '@/components/admin/message-templates';
 import type { PaymentStatus, ShippingStatus } from '@/types/database';
 

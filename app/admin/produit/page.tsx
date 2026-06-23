@@ -3,6 +3,8 @@ import { redirect } from 'next/navigation';
 import { getSettings } from '@/lib/settings';
 import { getStock } from '@/lib/stock';
 import { signOut } from '@/app/admin/commandes/actions';
+
+export const dynamic = 'force-dynamic';
 import ProductSettingsForm from '@/components/admin/product-settings-form';
 
 export default async function AdminProduitPage() {

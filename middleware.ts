@@ -8,7 +8,7 @@ import { createMiddlewareClient } from '@/lib/supabase/middleware';
  * Unauthenticated users are redirected to /admin/login.
  * Authenticated users on /admin/login are redirected to /admin/commandes.
  */
-export async function proxy(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const response = NextResponse.next({ request });
   const supabase = createMiddlewareClient(request, response);
 

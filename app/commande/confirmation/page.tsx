@@ -25,6 +25,7 @@ export default async function ConfirmationPage({ searchParams }: ConfirmationPag
 
   const weroPhone = settings?.wero_phone ?? '06 XX XX XX XX';
   const weroBeneficiary = settings?.wero_beneficiary_name ?? null;
+  const productPrice = settings?.product_price ?? 44;
 
   if (!isValidReference(ref)) {
     return (
@@ -124,7 +125,7 @@ export default async function ConfirmationPage({ searchParams }: ConfirmationPag
                 Total
               </span>
               <span className="font-[family-name:var(--font-anton)] text-[20px] text-[#f4f4f3]">
-                44 €
+                {productPrice} €
               </span>
             </div>
           </div>
@@ -173,7 +174,7 @@ export default async function ConfirmationPage({ searchParams }: ConfirmationPag
                   Indique le montant exact
                 </p>
                 <p className="font-[family-name:var(--font-space-mono)] text-[15px] text-[#f4f4f3]">
-                  44,00 €
+                  {productPrice.toFixed(2).replace('.', ',')} €
                 </p>
               </div>
             </li>
